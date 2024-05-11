@@ -46,10 +46,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         })
-        .catch(err => console.error('Error fetching Mario data:', err));
+        .catch(err => console.error('Error fetching image data:', err));
     }
 
-    setInterval(drawMario, 1000);
+    setInterval(drawImage, 1000);
 });
 
 
