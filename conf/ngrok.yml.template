@@ -1,0 +1,9 @@
+authtoken: 1ZJ3K................C9JE 
+version: "2"
+region: us
+tunnels:
+  qr-code-listener:
+    proto: http
+    addr: redis-updater-api:4000
+    domain: cardinal-meet-bat.ngrok-free.app
+    
