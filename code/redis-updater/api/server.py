@@ -5,6 +5,7 @@ import os
 import sys
 import subprocess
 
+import redis
 from api.update_redis import update_coords_in_redis
 
 
@@ -17,9 +18,18 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
             # Send an HTTP response
             self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(
+                b"<H1>Thank you! &#128640;</H1><p>Refresh to uncover more pixels</p>"
+            )
+        elif self.path == '/clear':
+            r = redis.from_url(url)
+            r.flushdb()
+            self.send_response(200)
             self.send_header('Content-type', 'text/plain')
             self.end_headers()
-            self.wfile.write(b"Thank you! Refresh this page to uncover more pixels")
+            self.wfile.write(b"It was there and now it's gone")
         else:
             super().do_GET()
 
