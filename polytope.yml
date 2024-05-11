@@ -1,28 +1,13 @@
 templates:
 - id: stack
-  run: [qr-code-listener, redis, polytope/redis!insight, redis-updater-api, coords-api-go, frontend]
+  run:
+    - qr-code-listener
+    - redis
+    - polytope/redis!insight
+    - redis-updater-api
+    - coords-api-go
+    - frontend
 modules:
-- id: redis
-  module: polytope/redis
-  args:
-    services:
-    - id: redis
-      ports:
-      - {protocol: tcp, port: 6379}
-
-- id: coords-api-go
-  info: The Coords API in go
-  module: polytope/container
-  args:
-    env:
-    - {name: PORT, value: 9099}
-    - {name: REDIS_URL, value: 'redis://redis:6379/0'}
-    image: ghcr.io/shrimpsizemoose/coords-api:0.1.0
-    services:
-    - id: coords-api
-      ports:
-      - {protocol: http, port: 9099}
-
 - id: qr-code-listener
   module: polytope/ngrok
   args:
@@ -35,6 +20,14 @@ modules:
     mounts:
       - path: /home/ngrok/.config/ngrok/ngrok.yml
         source: {path: conf/ngrok.yml, type: host}
+
+- id: redis
+  module: polytope/redis
+  args:
+    services:
+    - id: redis
+      ports:
+      - {protocol: tcp, port: 6379}
 
 - id: redis-updater-api
   module: polytope/python
@@ -59,6 +52,19 @@ modules:
           type: volume
           scope: project
           id: dependency-cache
+
+- id: coords-api-go
+  info: The Coords API in go
+  module: polytope/container
+  args:
+    env:
+    - {name: PORT, value: 9099}
+    - {name: REDIS_URL, value: 'redis://redis:6379/0'}
+    image: ghcr.io/shrimpsizemoose/evaporating-image-coords-api:0.1.0
+    services:
+    - id: coords-api
+      ports:
+      - {protocol: http, port: 9099}
 
 - id: frontend
   module: polytope/caddy
