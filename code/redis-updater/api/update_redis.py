@@ -33,10 +33,9 @@ def update_coords_in_redis(url, evaporate=False):
 
     # moose can go
     pixels = build_coords_data(moose, shiftX=7, shiftY=5)
-    if evaporate:
-        pixels = list(pixels.items())
-        random.shuffle(pixels)
-    limit = 70
+    pixels = list(pixels.items())
+    random.shuffle(pixels)
+    limit = 70 if evaporate else len(pixels)
     for i, ((y, x), v) in enumerate(pixels):
         key = f'coords:{y}:{x}'
         if r.exists(key):
