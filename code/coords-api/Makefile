@@ -9,3 +9,7 @@ SERVICE_TAG=${REGISTRY}/${NAMESPACE}/${APP}:${VERSION}
 
 @build: *.go Dockerfile
 	docker build --tag ${SERVICE_TAG} .
+
+
+@push:
+	docker push ${SERVICE_TAG}
