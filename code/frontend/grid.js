@@ -29,8 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function drawMario() {
-        fetch("http://localhost:9099/coords/")
+    function drawImage() {
+        fetch(`http://localhost:9099/coords/${cols}/${rows}/`)
         .then(response => response.json())
         .then(data => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
