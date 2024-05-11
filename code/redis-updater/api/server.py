@@ -7,6 +7,7 @@ import subprocess
 
 import redis
 from api.update_redis import update_coords_in_redis
+from api.conway import read_grid, iter_grid, write_grid
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -23,6 +24,15 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(
                 b"<H1>Thank you! &#128640;</H1><p>Refresh to uncover more pixels</p>"
             )
+        elif self.path == '/conway-iter':
+            r = redis.from_url(url)
+            grid = read_grid(r)
+            r.flushdb()
+            write_grid(r, iter_grid(grid))
+            self.send_response(200)
+            self.send_header('Content-type', 'text/pain')
+            self.end_headers()
+            self.wfile.write(b"pew pew")
         elif self.path == '/clear':
             r = redis.from_url(url)
             r.flushdb()
