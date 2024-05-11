@@ -33,7 +33,8 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`http://localhost:9099/coords/${cols}/${rows}/`)
         .then(response => response.json())
         .then(data => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "lightgreen";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
             data.coords.forEach(item => {
                 ctx.fillStyle = item.color;
                 // console.table(item);

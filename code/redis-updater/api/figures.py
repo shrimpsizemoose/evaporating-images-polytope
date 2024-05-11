@@ -15,7 +15,7 @@ def draw_moose():
 
     P = "pink"
     K = "black"
-    W = "brown"  # 904007
+    W = "#904007"
     Y = "#d0925e"
     _ = None
 
