@@ -15,7 +15,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         url = os.getenv('REDIS_URL')
         if self.path in ('/', '/full'):
             evaporate = self.path != '/full'
-            update_coords_in_redis(url, evaporate=evaporate)
+            update_coords_in_redis(
+                url,
+                evaporate=evaporate,
+                num_pixels_each_hit=70,
+                max_seconds_pixel_ttl=10,
+            )
 
             # Send an HTTP response
             self.send_response(200)

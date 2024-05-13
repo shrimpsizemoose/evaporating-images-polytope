@@ -25,7 +25,9 @@ def build_coords_data(coords, shiftX=0, shiftY=0, evaporate=False):
     return data
 
 
-def update_coords_in_redis(url, evaporate=False):
+def update_coords_in_redis(
+    url, evaporate=False, num_pixels_each_hit=70, max_seconds_pixel_ttl=10
+):
     r = redis.from_url(url)
 
     glider = draw_glider()
@@ -35,14 +37,14 @@ def update_coords_in_redis(url, evaporate=False):
     pixels = build_coords_data(moose, shiftX=7, shiftY=5)
     pixels = list(pixels.items())
     random.shuffle(pixels)
-    limit = 70 if evaporate else len(pixels)
+    limit = num_pixels_each_hit if evaporate else len(pixels)
     for i, ((y, x), v) in enumerate(pixels):
         key = f'coords:{y}:{x}'
         if r.exists(key):
             continue
         r.hset(key, mapping=v)
         if evaporate:
-            r.expire(key, int(20 * random.random()))
+            r.expire(key, int(max_seconds_pixel_ttl * random.random()))
         if i == limit:
             break
 
